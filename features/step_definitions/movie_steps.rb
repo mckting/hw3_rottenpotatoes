@@ -16,7 +16,14 @@ end
 Then /I should see "(.*)" before "(.*)"/ do |e1, e2|
   #  ensure that that e1 occurs before e2.
   #  page.body is the entire content of the page as a string.
-  
+  firstpos = page.body.index(e1)
+  secondpos = page.body.index(e2)
+  if firstpos.respond_to? :should
+     firstpos < secondpos
+  else
+     assert firstpos < secondpos
+  end
+ 
 end
 
 # Make it easier to express checking or unchecking several boxes at once
