@@ -27,4 +27,33 @@ When /I (un)?check the following ratings: (.*)/ do |uncheck, rating_list|
   # HINT: use String#split to split up the rating_list, then
   #   iterate over the ratings and reuse the "When I check..." or
   #   "When I uncheck..." steps in lines 89-95 of web_steps.rb
+  myarr = rating_list.split(",")
+  myarr.each do |myrating|
+        if uncheck == ""
+  	  check("ratings_" + myrating)
+        elsif uncheck == "un" 
+  	  uncheck("ratings_" + myrating)
+        end
+        #@all_ratings = Movie.all_ratings
+        #@selected_ratings = params[:ratings] || session[:ratings] || {}
+  end
 end
+
+Then /^I should see all of the movies$/ do
+	startpos = page.body.index('table id="movies"') 
+	endpos   = page.body.index('/table') 
+	mystr = page.body[startpos, endpos+5]	
+        mycount = mystr.scan(/<tr>/).count - 1
+	
+        if mycount.respond_to? :should
+    	   mycount.should == Movie.count
+  	else
+	   assert_equal Movie.count, mycount
+ 	end
+end
+
+	
+	
+ 
+
+
